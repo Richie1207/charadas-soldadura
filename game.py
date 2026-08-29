@@ -21,7 +21,7 @@ audio {
     display: none !important;
 }
 
-/* CAJAS MISTERIOSAS: Estilo Lingote de Oro / Maleta Metálica */
+/* CAJAS MISTERIOSAS Y BOTONES: Estilo Lingote de Oro / Maleta Metálica */
 div.stButton > button {
     background: linear-gradient(180deg, #FFDF00 0%, #D4AF37 50%, #997A00 100%);
     color: #000000 !important;
@@ -63,27 +63,27 @@ div.stButton > button:disabled * {
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
-    padding: 40px 60px;
+    padding: 30px 50px;
     border-radius: 24px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 30px 60px rgba(0,0,0,0.9), inset 0 0 20px rgba(255,255,255,0.03);
     text-align: center;
-    margin-top: 20px;
+    margin-top: 10px;
 }
 .texto-pregunta {
     color: #FFFFFF;
-    font-size: 90px; /* TEXTO GIGANTE, EL DOBLE DE ANTES */
+    font-size: 110px !important; /* TEXTO MONUMENTALMENTE GRANDE */
     font-weight: 900;
-    line-height: 1.1;
-    text-shadow: 4px 6px 15px rgba(0,0,0,0.9);
+    line-height: 1.05;
+    text-shadow: 5px 8px 18px rgba(0,0,0,0.9);
     margin: 0;
     font-family: 'Helvetica Neue', sans-serif;
 }
 
 /* EL DISTRACTOR: ANIMACIÓN DE ÍCONO GIGANTE */
 .icono-distractor {
-    font-size: 130px;
-    margin-bottom: 20px;
+    font-size: 120px;
+    margin-bottom: 10px;
     animation: flotar 2.5s ease-in-out infinite, palpitar 1.5s infinite alternate;
 }
 @keyframes flotar {
@@ -174,12 +174,17 @@ else:
     
     st.write("")
     
+    # --- BOTÓN PARA INTERRUMPIR EL CRONÓMETRO SI ADIVINAN ---
+    st.button("🛑 ¡ADIVINÓ! DETENER TIEMPO Y VOLVER", use_container_width=True, on_click=volver_al_tablero)
+    
+    # El Cronómetro
     temporizador = st.empty()
     for segundos in range(70, -1, -1):
-        temporizador.markdown(f"<h1 style='text-align: center; font-size: 130px; font-family: monospace; font-weight: 900; color: #FF3333; text-shadow: 0 0 40px rgba(255, 51, 51, 0.8); margin: 20px 0;'>00:{segundos:02d}</h1>", unsafe_allow_html=True)
+        temporizador.markdown(f"<h1 style='text-align: center; font-size: 130px; font-family: monospace; font-weight: 900; color: #FF3333; text-shadow: 0 0 40px rgba(255, 51, 51, 0.8); margin: 10px 0;'>00:{segundos:02d}</h1>", unsafe_allow_html=True)
         time.sleep(1)
         
-    st.markdown(f"<div style='background: linear-gradient(135deg, #0F5132 0%, #062C19 100%); padding: 30px; border-radius: 16px; border: 2px solid #75B798; box-shadow: 0 15px 40px rgba(0,0,0,0.8); margin-top: 20px;'><h3 style='text-align: center; color: #A3CFBB; margin: 0; font-weight: 400; text-transform: uppercase; font-size: 20px;'>Respuesta Correcta</h3><h2 style='text-align: center; color: #FFFFFF; font-size: 55px; margin: 10px 0 0 0; font-weight: 900; text-shadow: 2px 2px 10px rgba(0,0,0,0.5);'>{q['respuesta']}</h2></div>", unsafe_allow_html=True)
+    st.markdown(f"<div style='background: linear-gradient(135deg, #0F5132 0%, #062C19 100%); padding: 30px; border-radius: 16px; border: 2px solid #75B798; box-shadow: 0 15px 40px rgba(0,0,0,0.8); margin-top: 10px;'><h3 style='text-align: center; color: #A3CFBB; margin: 0; font-weight: 400; text-transform: uppercase; font-size: 20px;'>Respuesta Correcta</h3><h2 style='text-align: center; color: #FFFFFF; font-size: 55px; margin: 10px 0 0 0; font-weight: 900; text-shadow: 2px 2px 10px rgba(0,0,0,0.5);'>{q['respuesta']}</h2></div>", unsafe_allow_html=True)
     st.write("")
     
-    st.button("⬅ VOLVER AL ESTUDIO", use_container_width=True, on_click=volver_al_tablero)
+    # Botón al finalizar el tiempo
+    st.button("⬅ VOLVER AL ESTUDIO", use_container_width=True, key="volver_final", on_click=volver_al_tablero)
