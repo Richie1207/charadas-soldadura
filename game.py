@@ -58,26 +58,42 @@ div.stButton > button:disabled * {
     color: #718096 !important;
 }
 
-/* TARJETA DE PREGUNTA: Efecto Vidrio Premium (Glassmorphism) */
+/* TARJETA DE PREGUNTA Y TEXTO GIGANTE */
 .tarjeta-pregunta {
-    background: rgba(255, 255, 255, 0.07);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    padding: 60px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    padding: 40px 60px;
     border-radius: 24px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 30px 60px rgba(0,0,0,0.8), inset 0 0 20px rgba(255,255,255,0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.9), inset 0 0 20px rgba(255,255,255,0.03);
     text-align: center;
-    margin-top: 30px;
+    margin-top: 20px;
 }
 .texto-pregunta {
     color: #FFFFFF;
-    font-size: 46px;
-    font-weight: 700;
-    line-height: 1.3;
-    text-shadow: 2px 4px 10px rgba(0,0,0,0.6);
+    font-size: 90px; /* TEXTO GIGANTE, EL DOBLE DE ANTES */
+    font-weight: 900;
+    line-height: 1.1;
+    text-shadow: 4px 6px 15px rgba(0,0,0,0.9);
     margin: 0;
     font-family: 'Helvetica Neue', sans-serif;
+}
+
+/* EL DISTRACTOR: ANIMACIÓN DE ÍCONO GIGANTE */
+.icono-distractor {
+    font-size: 130px;
+    margin-bottom: 20px;
+    animation: flotar 2.5s ease-in-out infinite, palpitar 1.5s infinite alternate;
+}
+@keyframes flotar {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-25px); }
+    100% { transform: translateY(0px); }
+}
+@keyframes palpitar {
+    0% { filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.4)); }
+    100% { filter: drop-shadow(0 0 50px rgba(255, 215, 0, 1)); }
 }
 </style>
 """
@@ -86,13 +102,14 @@ st.markdown(estilos_comunes, unsafe_allow_html=True)
 def volver_al_tablero():
     st.session_state.caja_actual = None
 
+# Base de datos con íconos temáticos y distractores
 preguntas_base = [
-    {"pregunta": "Línea continua de metal fundido que une de forma permanente las piezas.", "respuesta": "Cordón de Soldadura"},
-    {"pregunta": "Son pequeñas partículas que se producen al soldar y se depositan alrededor del cordón y se pueden evitar con spray. ¿Cómo se llaman?", "respuesta": "Proyecciones"},
-    {"pregunta": "Defecto estructural donde el metal absorbe aire por falta de gas protector.", "respuesta": "Porosidad"},
-    {"pregunta": "Gastos operativos obligatorios que se pagan sí o sí (ej. alquiler).", "respuesta": "Costes Fijos"},
-    {"pregunta": "Pérdida de valor y desgaste de la maquinaria por su uso continuo.", "respuesta": "Amortización"},
-    {"pregunta": "Momento exacto donde las ventas igualan a los gastos (beneficio cero).", "respuesta": "Punto de Equilibrio"}
+    {"pregunta": "Línea continua de metal fundido que une de forma permanente las piezas.", "respuesta": "Cordón de Soldadura", "icono": "⚡"},
+    {"pregunta": "Son pequeñas partículas que se producen al soldar y se depositan alrededor del cordón... ¿Cómo se llaman?", "respuesta": "Proyecciones", "icono": "💥"},
+    {"pregunta": "Defecto estructural donde el metal absorbe aire por falta de gas protector.", "respuesta": "Porosidad", "icono": "🌪️"},
+    {"pregunta": "Gastos operativos obligatorios que se pagan sí o sí (ej. alquiler).", "respuesta": "Costes Fijos", "icono": "🏢"},
+    {"pregunta": "Pérdida de valor y desgaste de la maquinaria por su uso continuo.", "respuesta": "Amortización", "icono": "📉"},
+    {"pregunta": "Momento exacto donde las ventas igualan a los gastos (beneficio cero).", "respuesta": "Punto de Equilibrio", "icono": "⚖️"}
 ]
 
 if 'cajas_abiertas' not in st.session_state:
@@ -106,12 +123,11 @@ if 'mezcla' not in st.session_state:
 # --- PANTALLA 1: EL TABLERO ---
 if st.session_state.caja_actual is None:
     
-    # 🎵 MÚSICA DE FONDO (Menú) 🎵
+    # 🎵 MÚSICA DE FONDO 🎵
     ruta_fondo = "fondo.mp3"
     if os.path.exists(ruta_fondo):
         st.audio(ruta_fondo, format="audio/mp3", autoplay=True, loop=True)
     
-    # Encabezado A1
     st.markdown("<h1 style='text-align: center; color: #FFFFFF; font-size: 65px; margin-top: 0px; font-weight: 900; text-transform: uppercase; letter-spacing: 3px; text-shadow: 0px 4px 15px rgba(255,215,0,0.4);'>Fabricación Industrial</h1>", unsafe_allow_html=True)
     st.markdown("<h3 style='text-align: center; color: #D4AF37; font-size: 26px; font-weight: 400; letter-spacing: 5px; margin-top: -15px; text-transform: uppercase;'>Técnica y Rentabilidad</h3>", unsafe_allow_html=True)
     st.markdown("<p style='text-align: center; color: #A0AEC0; font-size: 16px; margin-bottom: 40px;'>PRESENTADO POR: CARLOS SIERRA Y RICARDO GARCÍA</p>", unsafe_allow_html=True)
@@ -119,7 +135,7 @@ if st.session_state.caja_actual is None:
     col1, col2, col3 = st.columns(3)
     columnas = [col1, col2, col3, col1, col2, col3]
     
-    st.write("") # Espaciador
+    st.write("") 
     
     for i in range(6):
         caja_num = i + 1
@@ -136,7 +152,7 @@ if st.session_state.caja_actual is None:
 
 # --- PANTALLA 2: LA PREGUNTA ---
 else:
-    # Cambiamos el fondo para dar más tensión (rojo oscuro)
+    # Fondo de máxima tensión (rojo profundo)
     st.markdown("""
     <style>
     .stApp {
@@ -148,18 +164,18 @@ else:
     
     q = st.session_state.caja_actual
     
-    # 🎵 MÚSICA DE TENSIÓN / ACCIÓN 🎵
+    # 🎵 MÚSICA DE ACCIÓN 🎵
     ruta_audio = "musica.webm"
     if os.path.exists(ruta_audio):
         st.audio(ruta_audio, format="audio/webm", autoplay=True)
     
-    st.markdown(f"<div class='tarjeta-pregunta'><p class='texto-pregunta'>{q['pregunta']}</p></div>", unsafe_allow_html=True)
+    # Renderizamos la tarjeta con el ícono animado distractor y la letra gigante
+    st.markdown(f"<div class='tarjeta-pregunta'><div class='icono-distractor'>{q['icono']}</div><p class='texto-pregunta'>{q['pregunta']}</p></div>", unsafe_allow_html=True)
     
     st.write("")
     
     temporizador = st.empty()
     for segundos in range(70, -1, -1):
-        # Reloj digital gigante brillante
         temporizador.markdown(f"<h1 style='text-align: center; font-size: 130px; font-family: monospace; font-weight: 900; color: #FF3333; text-shadow: 0 0 40px rgba(255, 51, 51, 0.8); margin: 20px 0;'>00:{segundos:02d}</h1>", unsafe_allow_html=True)
         time.sleep(1)
         
