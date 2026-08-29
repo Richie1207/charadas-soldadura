@@ -6,7 +6,7 @@ import os
 # Configuración de la página
 st.set_page_config(page_title="Charadas de Soldadura", layout="wide")
 
-# --- DISEÑO VIBRANTE DE CONCURSO ---
+# --- DISEÑO VIBRANTE DE CONCURSO (AZUL MARINO, DORADO Y NARANJA) ---
 estilo_css = """
 <style>
 /* Fondo principal Azul Marino vibrante con figuras Naranja y Dorado */
@@ -72,7 +72,7 @@ st.markdown(estilo_css, unsafe_allow_html=True)
 def volver_al_tablero():
     st.session_state.caja_actual = None
 
-# Base de datos de preguntas actualizadas
+# Base de datos de preguntas (con la nueva pregunta 2)
 preguntas_base = [
     {"pregunta": "Línea continua de metal fundido que une de forma permanente las piezas.", "respuesta": "Cordón de Soldadura"},
     {"pregunta": "Son pequeñas partículas que se producen al soldar y se depositan alrededor del cordón y se pueden evitar con spray. ¿Cómo se llaman?", "respuesta": "Proyecciones"},
@@ -117,17 +117,21 @@ if st.session_state.caja_actual is None:
 else:
     q = st.session_state.caja_actual
     
-    st.markdown(f"<div class='tarjeta-pregunta'><h1 style='color: #0A192F; font-size: 45px; margin: 0;'>{q['pregunta']}</h1></div>", unsafe_allow_html=True)
+    st.markdown(f"<div class='tarjeta-pregunta'><h1 style='color: #0A192F; font-size: 42px; margin: 0;'>{q['pregunta']}</h1></div>", unsafe_allow_html=True)
     
-    # 🎵 MÚSICA INVISIBLE CON RUTA EXACTA (PARA LOCAL) 🎵
-    ruta_audio = "/Users/richie/Downloads/musica.webm"
+    # 🎵 MÚSICA INTELIGENTE (Busca en carpeta o en Descargas local) 🎵
+    ruta_audio = "musica.webm"
+    if not os.path.exists(ruta_audio):
+        ruta_audio = "/Users/richie/Downloads/musica.webm"
+
     if os.path.exists(ruta_audio):
         st.audio(ruta_audio, format="audio/webm", autoplay=True)
     else:
-        st.warning(f"🎵 No se encuentra el archivo en la ruta: {ruta_audio}")
+        st.warning("🎵 No se encuentra el archivo 'musica.webm'. Asegúrate de tenerlo en la carpeta o en Descargas.")
     
     st.write("")
     
+    # Cronómetro de 70 segundos
     temporizador = st.empty()
     for segundos in range(70, -1, -1):
         temporizador.markdown(f"<h1 style='text-align: center; font-size: 110px; color: #FF3333; text-shadow: 4px 4px 15px rgba(0,0,0,0.8); margin-top: 10px;'>⏱️ {segundos}</h1>", unsafe_allow_html=True)
