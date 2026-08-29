@@ -6,18 +6,15 @@ import os
 # Configuración de la página
 st.set_page_config(page_title="Charadas de Soldadura", layout="wide")
 
-# --- DISEÑO VIBRANTE DE CONCURSO (AZUL MARINO, DORADO Y NARANJA) ---
+# --- DISEÑO VIBRANTE DE CONCURSO ---
 estilo_css = """
 <style>
 /* Fondo principal Azul Marino vibrante con figuras Naranja y Dorado */
 .stApp {
-    background-color: #0A192F; /* Azul marino profundo y elegante */
+    background-color: #0A192F;
     background-image: 
-        /* Figura dorada arriba derecha */
         linear-gradient(135deg, rgba(255, 215, 0, 0.4) 0%, transparent 30%),
-        /* Figura naranja abajo izquierda */
         linear-gradient(315deg, rgba(255, 102, 0, 0.4) 0%, transparent 30%),
-        /* Círculos flotantes tipo focos de escenario */
         radial-gradient(circle at 85% 70%, rgba(255, 102, 0, 0.25) 0%, transparent 30%),
         radial-gradient(circle at 15% 30%, rgba(255, 215, 0, 0.2) 0%, transparent 30%);
 }
@@ -39,7 +36,7 @@ div.stButton > button {
     transition: all 0.3s ease;
 }
 div.stButton > button * {
-    color: #0A192F !important; /* Fuerza el color oscuro en el texto del botón */
+    color: #0A192F !important;
     font-weight: bold;
 }
 div.stButton > button:hover {
@@ -75,10 +72,10 @@ st.markdown(estilo_css, unsafe_allow_html=True)
 def volver_al_tablero():
     st.session_state.caja_actual = None
 
-# Base de datos de preguntas
+# Base de datos de preguntas actualizadas
 preguntas_base = [
     {"pregunta": "Línea continua de metal fundido que une de forma permanente las piezas.", "respuesta": "Cordón de Soldadura"},
-    {"pregunta": "Capa de residuos e impurezas solidificada sobre el metal. Se elimina con piqueta.", "respuesta": "Escoria"},
+    {"pregunta": "Son pequeñas partículas que se producen al soldar y se depositan alrededor del cordón y se pueden evitar con spray. ¿Cómo se llaman?", "respuesta": "Proyecciones"},
     {"pregunta": "Defecto estructural donde el metal absorbe aire por falta de gas protector.", "respuesta": "Porosidad"},
     {"pregunta": "Gastos operativos obligatorios que se pagan sí o sí (ej. alquiler).", "respuesta": "Costes Fijos"},
     {"pregunta": "Pérdida de valor y desgaste de la maquinaria por su uso continuo.", "respuesta": "Amortización"},
@@ -97,7 +94,6 @@ if 'mezcla' not in st.session_state:
 # --- PANTALLA 1: EL TABLERO DE CAJAS ---
 if st.session_state.caja_actual is None:
     
-    # 🌟 PORTADA Y PRESENTACIÓN 🌟
     st.markdown("<h1 style='text-align: center; color: #FFD700; font-size: 65px; margin-top: 20px; text-shadow: 3px 3px 10px rgba(0,0,0,0.8);'>Fabricación de Mesa Industrial:<br>Técnica y Rentabilidad</h1>", unsafe_allow_html=True)
     st.markdown("<h2 style='text-align: center; color: #FFFFFF; text-shadow: 1px 1px 5px rgba(0,0,0,0.8);'>Presentado Por: Carlos Sierra y Ricardo García</h2>", unsafe_allow_html=True)
     
@@ -121,27 +117,23 @@ if st.session_state.caja_actual is None:
 else:
     q = st.session_state.caja_actual
     
-    # Pregunta envuelta en la tarjeta blanca de alto contraste
-    st.markdown(f"<div class='tarjeta-pregunta'><h1 style='color: #0A192F; font-size: 55px; margin: 0;'>{q['pregunta']}</h1></div>", unsafe_allow_html=True)
+    st.markdown(f"<div class='tarjeta-pregunta'><h1 style='color: #0A192F; font-size: 45px; margin: 0;'>{q['pregunta']}</h1></div>", unsafe_allow_html=True)
     
-# 🎵 MÚSICA INVISIBLE CON RUTA RELATIVA 🎵
-    ruta_audio = "musica.webm"
+    # 🎵 MÚSICA INVISIBLE CON RUTA EXACTA (PARA LOCAL) 🎵
+    ruta_audio = "/Users/richie/Downloads/musica.webm"
     if os.path.exists(ruta_audio):
         st.audio(ruta_audio, format="audio/webm", autoplay=True)
     else:
         st.warning(f"🎵 No se encuentra el archivo en la ruta: {ruta_audio}")
     
-    st.write("") # Espacio
+    st.write("")
     
-    # Cronómetro gigante y brillante
     temporizador = st.empty()
     for segundos in range(70, -1, -1):
         temporizador.markdown(f"<h1 style='text-align: center; font-size: 110px; color: #FF3333; text-shadow: 4px 4px 15px rgba(0,0,0,0.8); margin-top: 10px;'>⏱️ {segundos}</h1>", unsafe_allow_html=True)
         time.sleep(1)
         
-    # 🎯 MOSTRAR LA RESPUESTA AL FINAL 🎯
     st.markdown(f"<div style='background: linear-gradient(90deg, #1b5e20, #2e7d32); padding: 25px; border-radius: 15px; border: 4px solid #66bb6a; box-shadow: 0 10px 30px rgba(0,0,0,0.5);'><h2 style='text-align: center; color: white; margin: 0;'>✅ La respuesta correcta era: <br><b style='font-size: 50px; color: #FFD700;'>{q['respuesta']}</b></h2></div>", unsafe_allow_html=True)
-    st.write("") # Espacio en blanco
+    st.write("")
     
-    # ✅ BOTÓN PARA VOLVER
     st.button("⬅️ Volver al tablero de cajas", use_container_width=True, on_click=volver_al_tablero)
